@@ -53,6 +53,7 @@
 #define CONFIG_SCREEN_SCK_PIN       PA5
 #define CONFIG_SCREEN_MOSI_PIN      PA7
 #define CONFIG_SCREEN_BLK_PIN       PB1  // TIM3
+#define CONFIG_SCREEN_SPI           SPI
 
 #define CONFIG_SCREEN_HOR_RES       240
 #define CONFIG_SCREEN_VER_RES       320
@@ -87,8 +88,8 @@
 
 /* Power */
 #define CONFIG_POWER_EN_PIN         PA12
-#define CONFIG_POWER_WAIT_TIME      500
-#define CONFIG_POWER_SHUTDOWM_DELAY 3500
+#define CONFIG_POWER_WAIT_TIME      1000
+#define CONFIG_POWER_SHUTDOWM_DELAY 5000
 
 /* Debug USART */
 #define CONFIG_DEBUG_SERIAL         Serial
@@ -106,15 +107,8 @@
 /* HAL Interrupt Update Timer */
 #define CONFIG_HAL_UPDATE_TIM       TIM4
 
-/* Show stack Info */
+/* Show Stack & Heap Info */
 #define CONFIG_SHOW_STACK_INFO      0
-
-/* Show heap Info */
 #define CONFIG_SHOW_HEAP_INFO       0
-
-/* Backlight Config */
-#define CONFIG_BACKLIGHT_MIN        150  // Range [0, 1000]
-#define CONFIG_BACKLIGHT_MAX        1000 // Range [0, 1000]
-#define CONFIG_BACKLIGHT_CTRL_RANGE 60   // minute Range[1, 120]
 
 #endif

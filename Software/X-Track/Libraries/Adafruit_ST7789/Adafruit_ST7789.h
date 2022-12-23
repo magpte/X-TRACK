@@ -4,32 +4,33 @@
 #include "Adafruit_GFX_Library/Adafruit_GFX.h"
 #include "SPI.h"
 
-#if defined(__STM32__)
-typedef volatile uint32_t PortReg_t;
-#define USE_FAST_IO
-#elif defined(__AVR__)
-typedef volatile uint8_t PortReg_t;
-#define USE_FAST_IO
-#endif
+#define ADAFRUIT_ST7789_SCREEN_WIDTH_DEFAULT    240
+#define ADAFRUIT_ST7789_SCREEN_HEIGHT_DEFAULT   240
 
 class Adafruit_ST7789 : public Adafruit_GFX
 {
 public:
-    Adafruit_ST7789(uint8_t cs, uint8_t dc, uint8_t rst, SPIClass* spix = &SPI);
-    Adafruit_ST7789(uint8_t cs, uint8_t dc, uint8_t rst, uint8_t clk, uint8_t mosi);
+    Adafruit_ST7789(
+        uint8_t cs, uint8_t dc, uint8_t rst,
+        SPIClass* spix = &SPI, 
+        int16_t w = ADAFRUIT_ST7789_SCREEN_WIDTH_DEFAULT, int16_t h = ADAFRUIT_ST7789_SCREEN_HEIGHT_DEFAULT
+    );
+    Adafruit_ST7789(
+        uint8_t cs, uint8_t dc, uint8_t rst, uint8_t sck, uint8_t mosi,
+        int16_t w = ADAFRUIT_ST7789_SCREEN_WIDTH_DEFAULT, int16_t h = ADAFRUIT_ST7789_SCREEN_HEIGHT_DEFAULT
+    );
 
     typedef enum
     {
-        White = 0xFFFF,
-        Black = 0x0000,
-        Blue = 0x001F,
-        Blue2 = 0x051F,
-        Red = 0xF800,
-        Magenta = 0xF81F,
-        Green = 0x07E0,
-        Cyan = 0x7FFF,
-        Yellow = 0xFFE0
-    } Color_Type;
+        COLOR_BLACK   = 0x0000,
+        COLOR_BLUE    = 0x001F,
+        COLOR_CYAN    = 0x7FFF,
+        COLOR_GREEN   = 0x07E0,
+        COLOR_MAGENTA = 0xF81F,
+        COLOR_RED     = 0xF800,
+        COLOR_WHITE   = 0xFFFF,
+        COLOR_YELLOW  = 0xFFE0
+    } color_t;
 
     void begin();
     void writeCommand(uint8_t cmd);
@@ -44,22 +45,16 @@ public:
     virtual void fillScreen(uint16_t color);
     virtual void drawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color);
     virtual void drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
-    virtual void drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, int16_t h);
     virtual void drawFastRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, int16_t h);
-    virtual void inline pushColor(uint16_t color)
-    {
-        writeData16(color);
-    }
+    virtual void pushColor(uint16_t color);
 
 private:
-    uint8_t rst_pin, cs_pin, dc_pin, sck_pin, mosi_pin;
+    uint8_t cs_pin, dc_pin, rst_pin, sck_pin, mosi_pin;
     SPIClass* spi;
 
-#if defined(USE_FAST_IO)
 #if defined(__STM32__)
     GPIO_TypeDef *csport, *dcport, *sckport, *mosiport;
     uint16_t cspinmask, dcpinmask, sckpinmask, mosipinmask;
-#endif
 #endif
 
 };
