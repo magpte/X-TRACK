@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011-2022 Bill Greiman
+ * Copyright (c) 2011-2024 Bill Greiman
  * This file is part of the SdFat library for SD memory cards.
  *
  * MIT License
@@ -22,8 +22,25 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef FatLib_h
-#define FatLib_h
-#include "FatFormatter.h"
-#include "FatVolume.h"
-#endif  // FatLib_h
+#define DBG_FILE "ExFatVolume.cpp"
+#include "../common/DebugMacros.h"
+#include "ExFatLib.h"
+ExFatVolume* ExFatVolume::m_cwv = nullptr;
+//-----------------------------------------------------------------------------
+bool ExFatVolume::chdir(const char* path) {
+  ExFatFile dir;
+  if (!dir.open(vwd(), path, O_RDONLY)) {
+    DBG_FAIL_MACRO;
+    goto fail;
+  }
+  if (!dir.isDir()) {
+    DBG_FAIL_MACRO;
+    goto fail;
+  }
+  // m_vwd = dir;
+  m_vwd.copy(&dir);
+  return true;
+
+fail:
+  return false;
+}

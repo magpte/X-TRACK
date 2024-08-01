@@ -22,8 +22,13 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef FatLib_h
-#define FatLib_h
-#include "FatFormatter.h"
-#include "FatVolume.h"
-#endif  // FatLib_h
+#ifndef FsLib_h
+#define FsLib_h
+/**
+ * \file
+ * \brief FsLib include file.
+ */
+#include "FsFile.h"
+#include "FsFormatter.h"
+#include "FsVolume.h"
+#endif  // FsLib_h

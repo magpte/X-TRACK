@@ -22,8 +22,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef FatLib_h
-#define FatLib_h
-#include "FatFormatter.h"
-#include "FatVolume.h"
-#endif  // FatLib_h
+#ifndef ExFatConfig_h
+#define ExFatConfig_h
+#include "SdFatConfig.h"
+
+#ifndef EXFAT_READ_ONLY
+#define EXFAT_READ_ONLY 0
+#endif  // EXFAT_READ_ONLY
+
+#endif  // ExFatConfig_h

@@ -22,8 +22,19 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef FatLib_h
-#define FatLib_h
-#include "FatFormatter.h"
-#include "FatVolume.h"
-#endif  // FatLib_h
+#include "SdSpiDriver.h"
+#if ENABLE_ARDUINO_FEATURES
+#if SD_CHIP_SELECT_MODE == 0
+//------------------------------------------------------------------------------
+void sdCsInit(SdCsPin_t pin) { pinMode(pin, OUTPUT); }
+//------------------------------------------------------------------------------
+void sdCsWrite(SdCsPin_t pin, bool level) { digitalWrite(pin, level); }
+#elif SD_CHIP_SELECT_MODE == 1
+//------------------------------------------------------------------------------
+__attribute__((weak)) void sdCsInit(SdCsPin_t pin) { pinMode(pin, OUTPUT); }
+//------------------------------------------------------------------------------
+__attribute__((weak)) void sdCsWrite(SdCsPin_t pin, bool level) {
+  digitalWrite(pin, level);
+}
+#endif  // SD_CHIP_SELECT_MODE == 0
+#endif  // ENABLE_ARDUINO_FEATURES

@@ -22,8 +22,47 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef FatLib_h
-#define FatLib_h
-#include "FatFormatter.h"
-#include "FatVolume.h"
-#endif  // FatLib_h
+#ifndef FatFormatter_h
+#define FatFormatter_h
+#include "../common/FsBlockDevice.h"
+#include "../common/SysCall.h"
+/**
+ * \class FatFormatter
+ * \brief Format a FAT volume.
+ */
+class FatFormatter {
+ public:
+  /** Constructor. */
+  FatFormatter() = default;
+  /**
+   * Format a FAT volume.
+   *
+   * \param[in] dev Block device for volume.
+   * \param[in] secBuffer buffer for writing to volume.
+   * \param[in] pr Print device for progress output.
+   *
+   * \return true for success or false for failure.
+   */
+  bool format(FsBlockDevice* dev, uint8_t* secBuffer, print_t* pr = nullptr);
+
+ private:
+  bool initFatDir(uint8_t fatType, uint32_t sectorCount);
+  void initPbs();
+  bool makeFat16();
+  bool makeFat32();
+  bool writeMbr();
+  uint32_t m_capacityMB;
+  uint32_t m_dataStart;
+  uint32_t m_fatSize;
+  uint32_t m_fatStart;
+  uint32_t m_relativeSectors;
+  uint32_t m_sectorCount;
+  uint32_t m_totalSectors;
+  FsBlockDevice* m_dev;
+  print_t* m_pr;
+  uint8_t* m_secBuf;
+  uint16_t m_reservedSectorCount;
+  uint8_t m_partType;
+  uint8_t m_sectorsPerCluster;
+};
+#endif  // FatFormatter_h

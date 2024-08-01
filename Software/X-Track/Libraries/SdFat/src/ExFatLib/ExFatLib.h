@@ -22,8 +22,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef FatLib_h
-#define FatLib_h
-#include "FatFormatter.h"
-#include "FatVolume.h"
-#endif  // FatLib_h
+#ifndef ExFatLib_h
+#define ExFatLib_h
+#include "ExFatFormatter.h"
+#include "ExFatVolume.h"
+#endif  // ExFatLib_h

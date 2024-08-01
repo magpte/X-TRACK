@@ -22,22 +22,20 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-// Driver for: https://github.com/rogerclarkmelbourne/Arduino_STM32
+
 #include "SdSpiDriver.h"
-#if defined(SD_USE_CUSTOM_SPI) && (defined(__STM32F1__) || defined(__STM32F4__))
-#if defined(__STM32F1__)
-#define USE_STM32_DMA 1
-#elif defined(__STM32F4__)
-#define USE_STM32_DMA 1
-#else  // defined(__STM32F1__)
-#error Unknown STM32 type
-#endif  // defined(__STM32F1__)
+#if defined(SD_USE_CUSTOM_SPI) && (defined(ESP8266) || defined(ESP32))
+#define ESP_UNALIGN_OK 1
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::activate() { m_spi->beginTransaction(m_spiSettings); }
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::begin(SdSpiConfig spiConfig) {
   if (spiConfig.spiPort) {
     m_spi = spiConfig.spiPort;
+#if defined(SDCARD_SPI) && defined(SDCARD_SS_PIN)
+  } else if (spiConfig.csPin == SDCARD_SS_PIN) {
+    m_spi = &SDCARD_SPI;
+#endif  // defined(SDCARD_SPI) && defined(SDCARD_SS_PIN)
   } else {
     m_spi = &SPI;
   }
@@ -51,21 +49,38 @@ void SdSpiArduinoDriver::end() { m_spi->end(); }
 uint8_t SdSpiArduinoDriver::receive() { return m_spi->transfer(0XFF); }
 //------------------------------------------------------------------------------
 uint8_t SdSpiArduinoDriver::receive(uint8_t* buf, size_t count) {
-#if USE_STM32_DMA
-  return m_spi->dmaTransfer(nullptr, buf, count);
-#else   // USE_STM32_DMA
-  m_spi->read(buf, count);
+#if ESP_UNALIGN_OK
+  m_spi->transferBytes(nullptr, buf, count);
+#else   // ESP_UNALIGN_OK
+  // Adjust to 32-bit alignment.
+  while ((reinterpret_cast<uintptr_t>(buf) & 0X3) && count) {
+    *buf++ = m_spi->transfer(0xff);
+    count--;
+  }
+  // Do multiple of four byte transfers.
+  size_t n4 = 4 * (count / 4);
+  if (n4) {
+    m_spi->transferBytes(nullptr, buf, n4);
+  }
+  // Transfer up to three remaining bytes.
+  for (buf += n4, count -= n4; count; count--) {
+    *buf++ = m_spi->transfer(0xff);
+  }
+#endif  // ESP_UNALIGN_OK
   return 0;
-#endif  // USE_STM32_DMA
 }
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::send(uint8_t data) { m_spi->transfer(data); }
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::send(const uint8_t* buf, size_t count) {
-#if USE_STM32_DMA
-  m_spi->dmaTransfer(const_cast<uint8*>(buf), nullptr, count);
-#else   // USE_STM32_DMA
-  m_spi->write(const_cast<uint8*>(buf), count);
-#endif  // USE_STM32_DMA
+#if !ESP_UNALIGN_OK
+  // Adjust to 32-bit alignment.
+  while ((reinterpret_cast<uintptr_t>(buf) & 0X3) && count) {
+    SPI.transfer(*buf++);
+    count--;
+  }
+#endif  // #if ESP_UNALIGN_OK
+
+  m_spi->transferBytes(const_cast<uint8_t*>(buf), nullptr, count);
 }
-#endif  // defined(SD_USE_CUSTOM_SPI) &&  defined(__STM32F1__)
+#endif  // defined(SD_USE_CUSTOM_SPI) && (defined(ESP8266) || defined(ESP32))

@@ -22,16 +22,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-// Driver for: https://github.com/rogerclarkmelbourne/Arduino_STM32
 #include "SdSpiDriver.h"
-#if defined(SD_USE_CUSTOM_SPI) && (defined(__STM32F1__) || defined(__STM32F4__))
-#if defined(__STM32F1__)
-#define USE_STM32_DMA 1
-#elif defined(__STM32F4__)
-#define USE_STM32_DMA 1
-#else  // defined(__STM32F1__)
-#error Unknown STM32 type
-#endif  // defined(__STM32F1__)
+#if defined(SD_USE_CUSTOM_SPI) && defined(ARDUINO_ARCH_APOLLO3)
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::activate() { m_spi->beginTransaction(m_spiSettings); }
 //------------------------------------------------------------------------------
@@ -51,21 +43,27 @@ void SdSpiArduinoDriver::end() { m_spi->end(); }
 uint8_t SdSpiArduinoDriver::receive() { return m_spi->transfer(0XFF); }
 //------------------------------------------------------------------------------
 uint8_t SdSpiArduinoDriver::receive(uint8_t* buf, size_t count) {
-#if USE_STM32_DMA
-  return m_spi->dmaTransfer(nullptr, buf, count);
-#else   // USE_STM32_DMA
-  m_spi->read(buf, count);
+  memset(buf, 0XFF, count);
+  m_spi->transfer(buf, count);
   return 0;
-#endif  // USE_STM32_DMA
 }
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::send(uint8_t data) { m_spi->transfer(data); }
 //------------------------------------------------------------------------------
 void SdSpiArduinoDriver::send(const uint8_t* buf, size_t count) {
-#if USE_STM32_DMA
-  m_spi->dmaTransfer(const_cast<uint8*>(buf), nullptr, count);
-#else   // USE_STM32_DMA
-  m_spi->write(const_cast<uint8*>(buf), count);
-#endif  // USE_STM32_DMA
+  // If not a multiple of four.  Command with CRC used six byte send.
+  while (count % 4) {
+    send(*buf++);
+    count--;
+  }
+  // Convert byte array to 4 byte array.
+  uint32_t myArray[count / 4];  // NOLINT
+  for (int x = 0; x < count / 4; x++) {
+    myArray[x] = ((uint32_t)buf[(x * 4) + 3] << (8 * 3)) |
+                 ((uint32_t)buf[(x * 4) + 2] << (8 * 2)) |
+                 ((uint32_t)buf[(x * 4) + 1] << (8 * 1)) |
+                 ((uint32_t)buf[(x * 4) + 0] << (8 * 0));
+  }
+  m_spi->transfer(reinterpret_cast<void*>(myArray), count);
 }
-#endif  // defined(SD_USE_CUSTOM_SPI) &&  defined(__STM32F1__)
+#endif  // defined(SD_USE_CUSTOM_SPI) && defined(ARDUINO_ARCH_APOLLO3)
