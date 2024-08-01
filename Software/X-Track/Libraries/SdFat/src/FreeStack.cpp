@@ -22,49 +22,59 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "MinimumSerial.h"
-#if defined(UDR0) || defined(DOXYGEN)
-const uint16_t MIN_2X_BAUD = F_CPU / (4 * (2 * 0XFFF + 1)) + 1;
+#define FREE_STACK_CPP
+#include "FreeStack.h"
+#if defined(HAS_UNUSED_STACK) && HAS_UNUSED_STACK
 //------------------------------------------------------------------------------
-int MinimumSerial::available() { return UCSR0A & (1 << RXC0) ? 1 : 0; }
-//------------------------------------------------------------------------------
-void MinimumSerial::begin(uint32_t baud) {
-  uint16_t baud_setting;
-  // don't worry, the compiler will squeeze out F_CPU != 16000000UL
-  if ((F_CPU != 16000000UL || baud != 57600) && baud > MIN_2X_BAUD) {
-    // Double the USART Transmission Speed
-    UCSR0A = 1 << U2X0;
-    baud_setting = (F_CPU / 4 / baud - 1) / 2;
-  } else {
-    // hardcoded exception for compatibility with the bootloader shipped
-    // with the Duemilanove and previous boards and the firmware on the 8U2
-    // on the Uno and Mega 2560.
-    UCSR0A = 0;
-    baud_setting = (F_CPU / 8 / baud - 1) / 2;
-  }
-  // assign the baud_setting
-  UBRR0H = baud_setting >> 8;
-  UBRR0L = baud_setting;
-  // enable transmit and receive
-  UCSR0B |= (1 << TXEN0) | (1 << RXEN0);
+inline char* stackBegin() {
+#if defined(__AVR__)
+  return __brkval ? __brkval : &__bss_end;
+#elif defined(__IMXRT1062__)
+  return reinterpret_cast<char*>(&_ebss);
+#elif defined(__arm__)
+  return reinterpret_cast<char*>(sbrk(0));
+#else  // defined(__AVR__)
+#error "undefined stackBegin"
+#endif  // defined(__AVR__)
 }
 //------------------------------------------------------------------------------
-void MinimumSerial::flush() {
-  while (((1 << UDRIE0) & UCSR0B) || !(UCSR0A & (1 << UDRE0))) {
+inline char* stackPointer() {
+#if defined(__AVR__)
+  return reinterpret_cast<char*>(SP);
+#elif defined(__arm__)
+  register uint32_t sp asm("sp");
+  return reinterpret_cast<char*>(sp);
+#else  // defined(__AVR__)
+#error "undefined stackPointer"
+#endif  // defined(__AVR__)
+}
+//------------------------------------------------------------------------------
+/** Stack fill pattern. */
+const char FILL = 0x55;
+void FillStack() {
+  char* p = stackBegin();
+  char* top = stackPointer();
+  while (p < top) {
+    *p++ = FILL;
   }
 }
 //------------------------------------------------------------------------------
-int MinimumSerial::read() {
-  if (UCSR0A & (1 << RXC0)) {
-    return UDR0;
+// May fail if malloc or new is used.
+int UnusedStack() {
+  char* h = stackBegin();
+  char* top = stackPointer();
+  int n;
+
+  for (n = 0; (h + n) < top; n++) {
+    if (h[n] != FILL) {
+      if (n >= 16) {
+        break;
+      }
+      // Attempt to skip used heap.
+      h += n;
+      n = 0;
+    }
   }
-  return -1;
+  return n;
 }
-//------------------------------------------------------------------------------
-size_t MinimumSerial::write(uint8_t b) {
-  while (((1 << UDRIE0) & UCSR0B) || !(UCSR0A & (1 << UDRE0))) {
-  }
-  UDR0 = b;
-  return 1;
-}
-#endif  //  defined(UDR0) || defined(DOXYGEN)
+#endif  // defined(HAS_UNUSED_STACK) && HAS_UNUSED_STACK
