@@ -38,8 +38,6 @@
 //------------------------------------------------------------------------------
 /** SdFat version 1.1.2 */
 #define SD_FAT_VERSION 10102
-
-#define SS PA4
 //==============================================================================
 /**
  * \class SdBaseFile
@@ -313,7 +311,7 @@ class SdFat : public SdFileSystem<SdSpiCard> {
  public:
 #if IMPLEMENT_SPI_PORT_SELECTION || defined(DOXYGEN)
   SdFat() {
-    m_spi.setPort(0);
+    m_spi.setPort(nullptr);
   }
   /** Constructor with SPI port selection.
    * \param[in] spiPort SPI port number.
@@ -500,17 +498,6 @@ class SdFatSoftSpiEX : public SdFileSystem<SdSpiCardEX>  {
  */
 class Sd2Card : public SdSpiCard {
  public:
-#if IMPLEMENT_SPI_PORT_SELECTION || defined(DOXYGEN)
-  Sd2Card() {
-    m_spi.setPort(0);
-  }
-  /** Constructor with SPI port selection.
-   * \param[in] spiPort SPI port number.
-   */
-  explicit Sd2Card(SPIClass* spiPort) {
-    m_spi.setPort(spiPort);
-  }
-#endif  // IMPLEMENT_SPI_PORT_SELECTION
   /** Initialize the SD card.
    * \param[in] csPin SD chip select pin.
    * \param[in] settings SPI speed, mode, and bit order.

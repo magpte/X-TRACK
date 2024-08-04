@@ -38,7 +38,7 @@
  * Set INCLUDE_SDIOS nonzero to include sdios.h in SdFat.h.
  * sdios.h provides C++ style IO Streams.
  */
-#define INCLUDE_SDIOS 0
+#define INCLUDE_SDIOS 1
 //------------------------------------------------------------------------------
 /**
  * Set USE_LONG_FILE_NAMES nonzero to use long file names (LFN).
@@ -77,7 +77,7 @@
  * USE_STANDARD_SPI_LIBRARY is two, the SPI port can be selected with the
  * constructors SdFat(SPIClass* spiPort) and SdFatEX(SPIClass* spiPort).
  */
-#define USE_STANDARD_SPI_LIBRARY 1
+#define USE_STANDARD_SPI_LIBRARY 0
 //------------------------------------------------------------------------------
 /**
  * If the symbol ENABLE_SOFTWARE_SPI_CLASS is nonzero, the class SdFatSoftSpi
@@ -98,7 +98,7 @@
 #define USE_FCNTL_H 1
 #elif defined(__arm__)
 // ARM gcc defines open flags.
-#define USE_FCNTL_H 0
+#define USE_FCNTL_H 1
 #elif defined(ESP32)
 #define USE_FCNTL_H 1
 #else  // defined(__AVR__)
@@ -150,7 +150,7 @@
  * Set FAT12_SUPPORT nonzero to enable use of FAT12 volumes.
  * FAT12 has not been well tested and requires additional flash.
  */
-#define FAT12_SUPPORT 1
+#define FAT12_SUPPORT 0
 //------------------------------------------------------------------------------
 /**
  * Set DESTRUCTOR_CLOSES_FILE nonzero to close a file in its destructor.
