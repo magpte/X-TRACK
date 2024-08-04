@@ -22,15 +22,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
-#include "mcu_type.h"
-
 #if defined(__STM32F1__) || defined(__STM32F4__)
 #include "SdSpiDriver.h"
 #if defined(__STM32F1__)
-#define USE_STM32_DMA 0
+#define USE_STM32_DMA 1
 #elif defined(__STM32F4__)
-#define USE_STM32_DMA 0
+#define USE_STM32_DMA 1
 #else  // defined(__STM32F1__)
 #error Unknown STM32 type
 #endif  // defined(__STM32F1__)
@@ -102,7 +99,7 @@ void SdSpiAltDriver::send(const uint8_t* buf , size_t n) {
 #if USE_STM32_DMA
   m_spi->dmaTransfer(const_cast<uint8*>(buf), nullptr, n);
 #else  // USE_STM32_DMA
-  m_spi->write(const_cast<uint8_t*>(buf), n);
+  m_spi->write(const_cast<uint8*>(buf), n);
 #endif  // USE_STM32_DMA
 }
 #endif  // defined(__STM32F1__) || defined(__STM32F4__)
