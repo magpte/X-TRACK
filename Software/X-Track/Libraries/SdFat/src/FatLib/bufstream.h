@@ -59,32 +59,32 @@ class ibufstream : public istream {
 
  protected:
   /// @cond SHOW_PROTECTED
-  virtual int16_t getch() {
+  int16_t getch() {
     if (m_pos < m_len) {
       return m_buf[m_pos++];
     }
     setstate(eofbit);
     return -1;
   }
-  virtual void getpos(FatPos_t *pos) {
+  void getpos(FatPos_t *pos) {
     pos->position = m_pos;
   }
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     (void)off;
     (void)way;
     return false;
   }
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     if (pos < m_len) {
       m_pos = pos;
       return true;
     }
     return false;
   }
-  virtual void setpos(FatPos_t *pos) {
+  void setpos(FatPos_t *pos) {
     m_pos = pos->position;
   }
-  virtual pos_type tellpos() {
+  pos_type tellpos() {
     return m_pos;
   }
   /// @endcond
@@ -130,7 +130,7 @@ class obufstream : public ostream {
 
  protected:
   /// @cond SHOW_PROTECTED
-  virtual void putch(char c) {
+  void putch(char c) {
     if (m_in >= (m_size - 1)) {
       setstate(badbit);
       return;
@@ -138,17 +138,17 @@ class obufstream : public ostream {
     m_buf[m_in++] = c;
     m_buf[m_in] = '\0';
   }
-  virtual void putstr(const char *str) {
+  void putstr(const char *str) {
     while (*str) {
       putch(*str++);
     }
   }
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     (void)off;
     (void)way;
     return false;
   }
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     if (pos > m_in) {
       return false;
     }
@@ -156,11 +156,11 @@ class obufstream : public ostream {
     m_buf[m_in] = '\0';
     return true;
   }
-  virtual bool sync() {
+  bool sync() {
     return true;
   }
 
-  virtual pos_type tellpos() {
+  pos_type tellpos() {
     return m_in;
   }
   /// @endcond

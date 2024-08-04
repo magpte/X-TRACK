@@ -69,7 +69,7 @@ class PrintFile : public FatFile, public Print {
     return n > INT_MAX ? INT_MAX : n;
   }
   /** Ensure that any bytes written to the file are saved to the SD card. */
-  virtual void flush() {
+  void flush() {
     FatFile::sync();
   }
   /** Return the next available byte without consuming it.
@@ -92,7 +92,7 @@ class PrintFile : public FatFile, public Print {
    * Use getWriteError to check for errors.
    * \return 1 for success and 0 for failure.
    */
-  virtual size_t write(uint8_t b) {
+  size_t write(uint8_t b) {
     return FatFile::write(b);
   }
   /** Write data to an open file.  Form required by Print.
@@ -110,7 +110,7 @@ class PrintFile : public FatFile, public Print {
    * for a read-only file, device is full, a corrupt file system or an
    * I/O error.
    */
-  virtual size_t write(const uint8_t *buf, size_t size) {
+  size_t write(const uint8_t *buf, size_t size) {
     return FatFile::write(buf, size);
   }
 };
@@ -147,12 +147,12 @@ class File : public FatFile, public Stream {
   /** \return number of bytes available from the current position to EOF
    *   or INT_MAX if more than INT_MAX bytes are available.
    */
-  virtual int available() {
+  int available() {
     uint32_t n = FatFile::available();
     return n > INT_MAX ? INT_MAX : n;
   }
   /** Ensure that any bytes written to the file are saved to the SD card. */
-  virtual void flush() {
+  void flush() {
     FatFile::sync();
   }
   /** This function reports if the current file is a directory or not.
@@ -173,7 +173,7 @@ class File : public FatFile, public Stream {
    *
    * \return The byte if no error and not at eof else -1;
    */
-  virtual int peek() {
+  int peek() {
     return FatFile::peek();
   }
   /** \return the current file position. */
@@ -195,7 +195,7 @@ class File : public FatFile, public Stream {
    * \return For success return the next byte in the file as an int.
    * If an error occurs or end of file is reached return -1.
    */
-  virtual int read() {
+  int read() {
     return FatFile::read();
   }
   /** Rewind a file if it is a directory */
@@ -223,7 +223,7 @@ class File : public FatFile, public Stream {
    * Use getWriteError to check for errors.
    * \return 1 for success and 0 for failure.
    */
-  virtual size_t write(uint8_t b) {
+  size_t write(uint8_t b) {
     return FatFile::write(b);
   }
   /** Write data to an open file.  Form required by Print.
@@ -241,7 +241,7 @@ class File : public FatFile, public Stream {
    * for a read-only file, device is full, a corrupt file system or an
    * I/O error.
    */
-  virtual size_t write(const uint8_t *buf, size_t size) {
+  size_t write(const uint8_t *buf, size_t size) {
     return FatFile::write(buf, size);
   }
 };

@@ -154,7 +154,7 @@ fail:
 //------------------------------------------------------------------------------
 int StdioStream::fputs(const char* str) {
   size_t len = strlen(str);
-  return fwrite(str, 1, len) == len ? (int)len : EOF;
+  return fwrite(str, 1, len) == len ? len : EOF;
 }
 //------------------------------------------------------------------------------
 size_t StdioStream::fread(void* ptr, size_t size, size_t count) {
@@ -235,7 +235,7 @@ int32_t StdioStream::ftell() {
 }
 //------------------------------------------------------------------------------
 size_t StdioStream::fwrite(const void* ptr, size_t size, size_t count) {
-  return write(ptr, count*size) < 0 ? (size_t)EOF : count;
+  return write(ptr, count*size) < 0 ? EOF : count;
 }
 //------------------------------------------------------------------------------
 int StdioStream::write(const void* buf, size_t count) {
@@ -261,7 +261,7 @@ int StdioStream::write(const void* buf, size_t count) {
 size_t StdioStream::print(const __FlashStringHelper *str) {
   const char *p = (const char*)str;
   uint8_t c;
-  while ((c = pgm_read_byte(p)) != false) {
+  while ((c = pgm_read_byte(p))) {
     if (putc(c) < 0) {
       return 0;
     }
@@ -434,7 +434,7 @@ int StdioStream::fillGet() {
 // private
 bool StdioStream::fillBuf() {
   if (!(m_status &
-        S_SRD)) {  // check for S_ERR and S_EOF?
+        S_SRD)) {  // check for S_ERR and S_EOF ??/////////////////
     if (!(m_status & S_SRW)) {
       m_status |= S_ERR;
       return false;
@@ -462,7 +462,7 @@ bool StdioStream::fillBuf() {
 // private
 bool StdioStream::flushBuf() {
   if (!(m_status &
-        S_SWR)) {  // check for S_ERR ?
+        S_SWR)) {  // check for S_ERR ??////////////////////////
     if (!(m_status & S_SRW)) {
       m_status |= S_ERR;
       return false;

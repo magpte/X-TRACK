@@ -375,7 +375,7 @@ void istream::getNumber(T* value) {
     }
   } else {
     // max unsigned value for T
-    uint32_t const m = (uint32_t)((T)-1);
+    uint32_t const m = (T)-1;
     if (getNumber(m, m, &tmp)) {
       *value = (T)tmp;
     }

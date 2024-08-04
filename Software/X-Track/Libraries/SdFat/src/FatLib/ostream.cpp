@@ -182,7 +182,7 @@ void ostream::putPgm(const char* str) {
   int n;
   for (n = 0; pgm_read_byte(&str[n]); n++) {}
   fill_not_left(n);
-  for (uint8_t c; (c = pgm_read_byte(str)) != false; str++) {
+  for (uint8_t c; (c = pgm_read_byte(str)); str++) {
     putch(c);
   }
   do_fill(n);

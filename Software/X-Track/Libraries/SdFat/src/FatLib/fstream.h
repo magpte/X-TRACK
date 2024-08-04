@@ -130,43 +130,43 @@ class fstream : public iostream, FatStreamBase {
   /** Internal - do not use
    * \return
    */
-  virtual int16_t getch() {
+  int16_t getch() {
     return FatStreamBase::getch();
   }
   /** Internal - do not use
   * \param[out] pos
   */
-  virtual void getpos(FatPos_t* pos) {
+  void getpos(FatPos_t* pos) {
     FatFile::getpos(pos);
   }
   /** Internal - do not use
    * \param[in] c
    */
-  virtual void putch(char c) {
+  void putch(char c) {
     FatStreamBase::putch(c);
   }
   /** Internal - do not use
    * \param[in] str
    */
-  virtual void putstr(const char *str) {
+  void putstr(const char *str) {
     FatStreamBase::putstr(str);
   }
   /** Internal - do not use
    * \param[in] pos
    */
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     return FatStreamBase::seekoff(off, way);
   }
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     return FatStreamBase::seekpos(pos);
   }
-  virtual void setpos(FatPos_t* pos) {
+  void setpos(FatPos_t* pos) {
     FatFile::setpos(pos);
   }
-  virtual bool sync() {
+  bool sync() {
     return FatStreamBase::sync();
   }
-  virtual pos_type tellpos() {
+  pos_type tellpos() {
     return FatStreamBase::curPosition();
   }
   /// @endcond
@@ -215,28 +215,28 @@ class ifstream : public istream, FatStreamBase {
   /** Internal - do not use
    * \return
    */
-  virtual int16_t getch() {
+  int16_t getch() {
     return FatStreamBase::getch();
   }
   /** Internal - do not use
    * \param[out] pos
    */
-  virtual void getpos(FatPos_t* pos) {
+  void getpos(FatPos_t* pos) {
     FatFile::getpos(pos);
   }
   /** Internal - do not use
    * \param[in] pos
    */
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     return FatStreamBase::seekoff(off, way);
   }
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     return FatStreamBase::seekpos(pos);
   }
-  virtual void setpos(FatPos_t* pos) {
+  void setpos(FatPos_t* pos) {
     FatFile::setpos(pos);
   }
-  virtual pos_type tellpos() {
+  pos_type tellpos() {
     return FatStreamBase::curPosition();
   }
   /// @endcond
@@ -292,26 +292,26 @@ class ofstream : public ostream, FatStreamBase {
    * Internal do not use
    * \param[in] c
    */
-  virtual void putch(char c) {
+  void putch(char c) {
     FatStreamBase::putch(c);
   }
-  virtual void putstr(const char* str) {
+  void putstr(const char* str) {
     FatStreamBase::putstr(str);
   }
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     return FatStreamBase::seekoff(off, way);
   }
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     return FatStreamBase::seekpos(pos);
   }
   /**
    * Internal do not use
    * \param[in] b
    */
-  virtual bool sync() {
+  bool sync() {
     return FatStreamBase::sync();
   }
-  virtual pos_type tellpos() {
+  pos_type tellpos() {
     return FatStreamBase::curPosition();
   }
   /// @endcond

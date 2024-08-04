@@ -254,7 +254,7 @@ char* fmtFloat(float value, char* p, uint8_t prec) {
     *--p = 'i';
     return p;
   }
-  if (value > 4294967040.0f) {
+  if (value > 4294967040.0) {
     *--p = 'f';
     *--p = 'v';
     *--p = 'o';
@@ -308,7 +308,7 @@ char* fmtFloat(float value, char* ptr, uint8_t prec, char expChar) {
     *--ptr = 'i';
     return ptr;
   }
-  if (!expChar && value > 4294967040.0f) {
+  if (!expChar && value > 4294967040.0) {
     *--ptr = 'f';
     *--ptr = 'v';
     *--ptr = 'o';
@@ -322,17 +322,17 @@ char* fmtFloat(float value, char* ptr, uint8_t prec, char expChar) {
     int8_t exp = 0;
     bool expNeg = false;
     if (value) {
-      while (value > 10.0f) {
-        value *= 0.1f;
+      while (value > 10.0) {
+        value *= 0.1;
         exp++;
       }
-      while (value < 1.0f) {
-        value *= 10.0f;
+      while (value < 1.0) {
+        value *= 10.0;
         exp--;
       }
       value += round;
-      if (value > 10.0f) {
-        value *= 0.1f;
+      if (value > 10.0) {
+        value *= 0.1;
         exp++;
       }
       expNeg = exp < 0;

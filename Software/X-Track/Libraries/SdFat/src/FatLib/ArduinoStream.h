@@ -82,7 +82,7 @@ done:
    * \param[in] way
    * \return true/false.
    */
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     (void)off;
     (void)way;
     return false;
@@ -91,7 +91,7 @@ done:
    * \param[in] pos
    * \return true/false.
    */
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     (void)pos;
     return false;
   }
@@ -120,28 +120,28 @@ class ArduinoOutStream : public ostream {
    * Internal do not use
    * \param[in] c
    */
-  virtual void putch(char c) {
+  void putch(char c) {
     if (c == '\n') {
       m_pr->write('\r');
     }
     m_pr->write(c);
   }
-  virtual void putstr(const char* str) {
+  void putstr(const char* str) {
     m_pr->write(str);
   }
-  virtual bool seekoff(off_type off, seekdir way) {
+  bool seekoff(off_type off, seekdir way) {
     (void)off;
     (void)way;
     return false;
   }
-  virtual bool seekpos(pos_type pos) {
+  bool seekpos(pos_type pos) {
     (void)pos;
     return false;
   }
-  virtual bool sync() {
+  bool sync() {
     return true;
   }
-  virtual pos_type tellpos() {
+  pos_type tellpos() {
     return 0;
   }
   /// @endcond
