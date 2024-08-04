@@ -505,7 +505,7 @@ bool SdSpiCard::readData(uint8_t* dst, size_t count) {
     goto fail;
   }
   // transfer data
-  if ((m_status = spiReceive(dst, count)) != false) {
+  if ((m_status = spiReceive(dst, count))) {
     error(SD_CARD_ERROR_DMA);
     goto fail;
   }

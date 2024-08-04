@@ -83,7 +83,7 @@ class SdioCard : public BaseBlockDriver {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool readBlock(uint32_t lba, uint8_t* dst);
+  bool readBlock(uint32_t lba, uint8_t* dst);
   /**
    * Read multiple 512 byte blocks from an SD card.
    *
@@ -93,7 +93,7 @@ class SdioCard : public BaseBlockDriver {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool readBlocks(uint32_t lba, uint8_t* dst, size_t nb);
+  bool readBlocks(uint32_t lba, uint8_t* dst, size_t nb);
   /**
    * Read a card's CID register. The CID contains card identification
    * information such as Manufacturer ID, Product name, Product serial
@@ -156,7 +156,7 @@ class SdioCard : public BaseBlockDriver {
    */
   bool readStop();
   /** \return success if sync successful. Not for user apps. */
-  virtual bool syncBlocks();
+  bool syncBlocks();
   /** Return the card type: SD V1, SD V2 or SDHC
    * \return 0 - SD V1, 1 - SD V2, or 3 - SDHC.
    */
@@ -169,7 +169,7 @@ class SdioCard : public BaseBlockDriver {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool writeBlock(uint32_t lba, const uint8_t* src);
+  bool writeBlock(uint32_t lba, const uint8_t* src);
   /**
    * Write multiple 512 byte blocks to an SD card.
    *
@@ -179,7 +179,7 @@ class SdioCard : public BaseBlockDriver {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool writeBlocks(uint32_t lba, const uint8_t* src, size_t nb);
+  bool writeBlocks(uint32_t lba, const uint8_t* src, size_t nb);
   /** Write one data block in a multiple block write sequence.
    * \param[in] src Pointer to the location of the data to be written.
    * \return The value true is returned for success and
@@ -256,12 +256,12 @@ class SdioCardEX : public SdioCard {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool readBlock(uint32_t block, uint8_t* dst);
+  bool readBlock(uint32_t block, uint8_t* dst);
   /** End multi-block transfer and go to idle state.
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool syncBlocks();
+  bool syncBlocks();
   /**
    * Writes a 512 byte block to an SD card.
    *
@@ -270,7 +270,7 @@ class SdioCardEX : public SdioCard {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool writeBlock(uint32_t block, const uint8_t* src);
+  bool writeBlock(uint32_t block, const uint8_t* src);
   /**
    * Read multiple 512 byte blocks from an SD card.
    *
@@ -280,7 +280,7 @@ class SdioCardEX : public SdioCard {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool readBlocks(uint32_t block, uint8_t* dst, size_t nb);
+  bool readBlocks(uint32_t block, uint8_t* dst, size_t nb);
   /**
    * Write multiple 512 byte blocks to an SD card.
    *
@@ -290,7 +290,7 @@ class SdioCardEX : public SdioCard {
    * \return The value true is returned for success and
    * the value false is returned for failure.
    */
-  virtual bool writeBlocks(uint32_t block, const uint8_t* src, size_t nb);
+  bool writeBlocks(uint32_t block, const uint8_t* src, size_t nb);
 
  private:
   static const uint32_t IDLE_STATE = 0;
