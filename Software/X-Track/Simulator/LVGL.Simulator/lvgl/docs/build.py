@@ -32,8 +32,14 @@ ex.exec()
 
 urlpath = re.sub('release/', '', br)
 
-os.environ['LVGL_URLPATH'] = urlpath
-os.environ['LVGL_GITCOMMIT'] = gitcommit
+# Be sure the GitHub links point to the right branch
+f = open("header.rst", "w")
+f.write(".. |github_link_base| replace:: https://github.com/lvgl/lvgl/blob/" + gitcommit + "/docs")
+f.close()
+
+base_html = "html_baseurl = 'https://docs.lvgl.io/" + urlpath + "/en/html/'"
+
+os.system("sed -i \"s|html_baseurl = .*|" + base_html +"|\" conf.py")
 
 clean = 0
 trans = 0

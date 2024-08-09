@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/widgets/extra/meter.md
+```
 # Meter (lv_meter)
 
 ## Overview

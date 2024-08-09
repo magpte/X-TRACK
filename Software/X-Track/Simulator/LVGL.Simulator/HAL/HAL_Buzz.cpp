@@ -1,4 +1,5 @@
 #include "HAL.h"
+#include <windows.h>
 
 static bool IsEnable = true;
 

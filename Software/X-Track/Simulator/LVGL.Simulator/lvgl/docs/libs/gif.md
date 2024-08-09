@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/libs/gif.md
+```
 
 # GIF decoder
 Allow using GIF images in LVGL. Based on https://github.com/lecram/gifdec

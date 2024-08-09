@@ -89,10 +89,3 @@ Extending the current theme
   :language: c
 
 
-Opacity and Transformations
-""""""""""""""""""""""""""""""""""
-
-.. lv_example:: styles/lv_example_style_15
-  :language: c
-
-

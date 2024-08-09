@@ -103,6 +103,7 @@ def exec():
      d_all.update(d_act)
 
   fout.write("```eval_rst\n")
+  fout.write(".. include:: /header.rst\n")
   fout.write(":github_url: |github_link_base|/examples.md\n")
   fout.write("```\n")
   fout.write("\n")
@@ -123,3 +124,4 @@ def exec():
       print_item(h, 3, d_all, fout)
 
     fout.write("")
+

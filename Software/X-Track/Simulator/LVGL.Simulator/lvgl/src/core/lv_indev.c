@@ -296,7 +296,6 @@ lv_timer_t * lv_indev_get_read_timer(lv_disp_t * indev)
     return indev->refr_timer;
 }
 
-
 lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point)
 {
     lv_obj_t * found_p = NULL;
@@ -304,20 +303,16 @@ lv_obj_t * lv_indev_search_obj(lv_obj_t * obj, lv_point_t * point)
     /*If this obj is hidden the children are hidden too so return immediately*/
     if(lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN)) return NULL;
 
-    lv_point_t p_trans = *point;
-    lv_obj_transform_point(obj, &p_trans, false, true);
-
-    bool hit_test_ok = lv_obj_hit_test(obj, &p_trans);
+    bool hit_test_ok = lv_obj_hit_test(obj, point);
 
     /*If the point is on this object or has overflow visible check its children too*/
-    if(_lv_area_is_point_on(&obj->coords, &p_trans, 0) || lv_obj_has_flag(obj, LV_OBJ_FLAG_OVERFLOW_VISIBLE)) {
+    if(_lv_area_is_point_on(&obj->coords, point, 0) || lv_obj_has_flag(obj, LV_OBJ_FLAG_OVERFLOW_VISIBLE)) {
         int32_t i;
         uint32_t child_cnt = lv_obj_get_child_cnt(obj);
-
         /*If a child matches use it*/
         for(i = child_cnt - 1; i >= 0; i--) {
             lv_obj_t * child = obj->spec_attr->children[i];
-            found_p = lv_indev_search_obj(child, &p_trans);
+            found_p = lv_indev_search_obj(child, point);
             if(found_p) return found_p;
         }
     }
@@ -852,9 +847,7 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
         if(indev_reset_check(proc)) return;
     }
 
-    lv_obj_transform_point(indev_obj_act, &proc->types.pointer.act_point, true, true);
-
-    /*If a new object was found reset some variables and send a pressed event handler*/
+    /*If a new object was found reset some variables and send a pressed Call the ancestor's event handler*/
     if(indev_obj_act != proc->types.pointer.act_obj) {
         proc->types.pointer.last_point.x = proc->types.pointer.act_point.x;
         proc->types.pointer.last_point.y = proc->types.pointer.act_point.y;
@@ -955,9 +948,6 @@ static void indev_proc_press(_lv_indev_proc_t * proc)
 static void indev_proc_release(_lv_indev_proc_t * proc)
 {
     if(proc->wait_until_release != 0) {
-        lv_event_send(proc->types.pointer.act_obj, LV_EVENT_PRESS_LOST, indev_act);
-        if(indev_reset_check(proc)) return;
-
         proc->types.pointer.act_obj  = NULL;
         proc->types.pointer.last_obj = NULL;
         proc->pr_timestamp           = 0;

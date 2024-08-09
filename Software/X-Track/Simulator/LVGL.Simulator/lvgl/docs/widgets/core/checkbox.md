@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/widgets/core/checkbox.md
+```
 # Checkbox (lv_checkbox)
 
 

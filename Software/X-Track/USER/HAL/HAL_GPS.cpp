@@ -47,6 +47,7 @@ void HAL::GPS_Update()
 
 bool HAL::GPS_GetInfo(GPS_Info_t* info)
 {
+
     memset(info, 0, sizeof(GPS_Info_t));
 
     info->isVaild = gps.location.isValid();

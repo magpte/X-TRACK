@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/porting/os.md
+```
 # Operating system and interrupts
 
 LVGL is **not thread-safe** by default.

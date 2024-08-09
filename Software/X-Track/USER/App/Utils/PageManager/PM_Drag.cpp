@@ -36,9 +36,11 @@
   */
 void PageManager::onRootDragEvent(lv_event_t* event)
 {
-    lv_event_code_t eventCode = lv_event_get_code(event);
+    lv_event_code_t code = lv_event_get_code(event);
 
-    if (!(eventCode == LV_EVENT_PRESSED || eventCode == LV_EVENT_PRESSING || eventCode == LV_EVENT_RELEASED))
+    if (code != LV_EVENT_PRESSED
+        || code != LV_EVENT_PRESSING
+        || code != LV_EVENT_RELEASED)
     {
         return;
     }
@@ -52,7 +54,8 @@ void PageManager::onRootDragEvent(lv_event_t* event)
         return;
     }
 
-    PageManager* manager = base->_Manager;
+    lv_event_code_t eventCode = lv_event_get_code(event);
+    PageManager* manager = base->Manager;
     LoadAnimAttr_t animAttr;
 
     if (!manager->GetCurrentLoadAnimAttr(&animAttr))
@@ -63,23 +66,15 @@ void PageManager::onRootDragEvent(lv_event_t* event)
 
     if (eventCode == LV_EVENT_PRESSED)
     {
-        if (manager->_AnimState.IsSwitchReq)
-        {
+        if (manager->AnimState.IsSwitchReq)
             return;
-        }
 
-        if (!manager->_AnimState.IsBusy)
-        {
+        if (!manager->AnimState.IsBusy)
             return;
-        }  
 
         PM_LOG_INFO("Root anim interrupted");
         lv_anim_del(root, animAttr.setter);
-        manager->_AnimState.IsBusy = false;
-
-        /* Temporary showing the bottom page */
-        PageBase* bottomPage = manager->GetStackTopAfter();
-        lv_obj_clear_flag(bottomPage->_root, LV_OBJ_FLAG_HIDDEN);
+        manager->AnimState.IsBusy = false;
     }
     else if (eventCode == LV_EVENT_PRESSING)
     {
@@ -104,7 +99,7 @@ void PageManager::onRootDragEvent(lv_event_t* event)
     }
     else if (eventCode == LV_EVENT_RELEASED)
     {
-        if (manager->_AnimState.IsSwitchReq)
+        if (manager->AnimState.IsSwitchReq)
         {
             return;
         }
@@ -135,7 +130,7 @@ void PageManager::onRootDragEvent(lv_event_t* event)
         }
         else if(end != animAttr.push.enter.end)
         {
-            manager->_AnimState.IsBusy = true;
+            manager->AnimState.IsBusy = true;
 
             lv_anim_t a;
             manager->AnimDefaultInit(&a);
@@ -143,9 +138,9 @@ void PageManager::onRootDragEvent(lv_event_t* event)
             lv_anim_set_var(&a, root);
             lv_anim_set_values(&a, start, animAttr.push.enter.end);
             lv_anim_set_exec_cb(&a, animAttr.setter);
-            lv_anim_set_ready_cb(&a, onRootDragAnimFinish);
+            lv_anim_set_ready_cb(&a, onRootAnimFinish);
             lv_anim_start(&a);
-            PM_LOG_INFO("Root drag anim start");
+            PM_LOG_INFO("Root anim start");
         }
     }
 }
@@ -155,18 +150,11 @@ void PageManager::onRootDragEvent(lv_event_t* event)
   * @param  a: Pointer to animation
   * @retval None
   */
-void PageManager::onRootDragAnimFinish(lv_anim_t* a)
+void PageManager::onRootAnimFinish(lv_anim_t* a)
 {
     PageManager* manager = (PageManager*)lv_anim_get_user_data(a);
-    PM_LOG_INFO("Root drag anim finish");
-    manager->_AnimState.IsBusy = false;
-
-    /* Hide the bottom page */
-    PageBase* bottomPage = manager->GetStackTopAfter();
-    if (bottomPage)
-    {
-        lv_obj_add_flag(bottomPage->_root, LV_OBJ_FLAG_HIDDEN);
-    }
+    PM_LOG_INFO("Root anim finish");
+    manager->AnimState.IsBusy = false;
 }
 
 /**
@@ -183,7 +171,7 @@ void PageManager::RootEnableDrag(lv_obj_t* root)
         LV_EVENT_ALL,
         base
     );
-    PM_LOG_INFO("Page(%s) Root drag enabled", base->_Name);
+    PM_LOG_INFO("Root drag enabled");
 }
 
 /**
@@ -194,8 +182,8 @@ void PageManager::RootEnableDrag(lv_obj_t* root)
 void PageManager::onRootAsyncLeave(void* data)
 {
     PageBase* base = (PageBase*)data;
-    PM_LOG_INFO("Page(%s) send event: LV_EVENT_LEAVE, need to handle...", base->_Name);
-    lv_event_send(base->_root, LV_EVENT_LEAVE, base);
+    PM_LOG_INFO("Page(%s) send event: LV_EVENT_LEAVE, need to handle...", base->Name);
+    lv_event_send(base->root, LV_EVENT_LEAVE, base);
 }
 
 /**

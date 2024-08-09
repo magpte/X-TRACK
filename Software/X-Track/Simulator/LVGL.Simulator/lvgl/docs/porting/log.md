@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/porting/log.md
+```
 # Logging
 
 LVGL has a built-in *Log* module to inform the user about what is happening in the library.

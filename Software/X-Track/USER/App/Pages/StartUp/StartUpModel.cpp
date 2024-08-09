@@ -1,4 +1,4 @@
-#include "StartUpModel.h"
+#include "StartupModel.h"
 
 using namespace Page;
 

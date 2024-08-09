@@ -32,12 +32,11 @@
   * @retval None
   */
 PageManager::PageManager(PageFactory* factory)
-    : _Factory(factory)
-    , _PagePrev(nullptr)
-    , _PageCurrent(nullptr)
-    , _RootDefaultStyle(nullptr)
+    : Factory(factory)
+    , PagePrev(nullptr)
+    , PageCurrent(nullptr)
 {
-    memset(&_AnimState, 0, sizeof(_AnimState));
+    memset(&AnimState, 0, sizeof(AnimState));
 
     SetGlobalLoadAnimType();
 }
@@ -49,7 +48,6 @@ PageManager::PageManager(PageFactory* factory)
   */
 PageManager::~PageManager()
 {
-    SetStackClear();
 }
 
 /**
@@ -59,9 +57,9 @@ PageManager::~PageManager()
   */
 PageBase* PageManager::FindPageInPool(const char* name)
 {
-    for (auto iter : _PagePool)
+    for (auto iter : PagePool)
     {
-        if (strcmp(name, iter->_Name) == 0)
+        if (strcmp(name, iter->Name) == 0)
         {
             return iter;
         }
@@ -76,12 +74,12 @@ PageBase* PageManager::FindPageInPool(const char* name)
   */
 PageBase* PageManager::FindPageInStack(const char* name)
 {
-    decltype(_PageStack) stk = _PageStack;
+    decltype(PageStack) stk = PageStack;
     while (!stk.empty())
     {
         PageBase* base = stk.top();
 
-        if (strcmp(name, base->_Name) == 0)
+        if (strcmp(name, base->Name) == 0)
         {
             return base;
         }
@@ -96,15 +94,30 @@ PageBase* PageManager::FindPageInStack(const char* name)
   * @brief  Install the page, and register the page to the page pool
   * @param  className: The class name of the page
   * @param  appName: Page application name, no duplicates allowed
-  * @retval Return true if successful
+  * @retval A pointer to the base class of the page, or nullptr if wrong
   */
-bool PageManager::Install(const char* className, const char* appName)
+PageBase* PageManager::Install(const char* className, const char* appName)
 {
-    if (_Factory == nullptr)
+    if (Factory == nullptr)
     {
-        PM_LOG_ERROR("Factory was not registered, can't install page");
-        return false;
+        PM_LOG_ERROR("Factory is not regsite, can't install page");
+        return nullptr;
     }
+
+    PageBase* base = Factory->CreatePage(className);
+    if (base == nullptr)
+    {
+        PM_LOG_ERROR("Factory has not %s", className);
+        return nullptr;
+    }
+
+    base->root = nullptr;
+    base->ID = 0;
+    base->Manager = nullptr;
+    base->UserData = nullptr;
+    memset(&base->priv, 0, sizeof(base->priv));
+
+    base->onCustomAttrConfig();
 
     if (appName == nullptr)
     {
@@ -112,31 +125,10 @@ bool PageManager::Install(const char* className, const char* appName)
         appName = className;
     }
 
-    if (FindPageInPool(appName) != nullptr)
-    {
-        PM_LOG_ERROR("Page(%s) was registered", appName);
-        return false;
-    }
-
-    PageBase* base = _Factory->CreatePage(className);
-    if (base == nullptr)
-    {
-        PM_LOG_ERROR("Factory has not %s", className);
-        return false;
-    }
-
-    base->_root = nullptr;
-    base->_ID = 0;
-    base->_Manager = nullptr;
-    base->_UserData = nullptr;
-    memset(&base->priv, 0, sizeof(base->priv));
-
     PM_LOG_INFO("Install Page[class = %s, name = %s]", className, appName);
-    bool retval = Register(base, appName);
+    Register(base, appName);
 
-    base->onCustomAttrConfig();
-
-    return retval;
+    return base;
 }
 
 /**
@@ -190,10 +182,10 @@ bool PageManager::Register(PageBase* base, const char* name)
         return false;
     }
 
-    base->_Manager = this;
-    base->_Name = name;
+    base->Manager = this;
+    base->Name = name;
 
-    _PagePool.push_back(base);
+    PagePool.push_back(base);
 
     return true;
 }
@@ -222,15 +214,15 @@ bool PageManager::Unregister(const char* name)
         return false;
     }
 
-    auto iter = std::find(_PagePool.begin(), _PagePool.end(), base);
+    auto iter = std::find(PagePool.begin(), PagePool.end(), base);
 
-    if (iter == _PagePool.end())
+    if (iter == PagePool.end())
     {
         PM_LOG_ERROR("Page(%s) was not found in PagePool", name);
         return false;
     }
 
-    _PagePool.erase(iter);
+    PagePool.erase(iter);
 
     PM_LOG_INFO("Unregister OK");
     return true;
@@ -243,7 +235,7 @@ bool PageManager::Unregister(const char* name)
   */
 PageBase* PageManager::GetStackTop()
 {
-    return _PageStack.empty() ? nullptr : _PageStack.top();
+    return PageStack.empty() ? nullptr : PageStack.top();
 }
 
 /**
@@ -260,11 +252,11 @@ PageBase* PageManager::GetStackTopAfter()
         return nullptr;
     }
 
-    _PageStack.pop();
+    PageStack.pop();
 
     PageBase* topAfter = GetStackTop();
 
-    _PageStack.push(top);
+    PageStack.push(top);
 
     return topAfter;
 }
@@ -292,19 +284,19 @@ void PageManager::SetStackClear(bool keepBottom)
         {
             if (keepBottom)
             {
-                _PagePrev = top;
-                PM_LOG_INFO("Keep page stack bottom(%s), breaking...", top->_Name);
+                PagePrev = top;
+                PM_LOG_INFO("Keep page stack bottom(%s), breaking...", top->Name);
                 break;
             }
             else
             {
-                _PagePrev = nullptr;
+                PagePrev = nullptr;
             }
         }
 
         FourceUnload(top);
 
-        _PageStack.pop();
+        PageStack.pop();
     }
     PM_LOG_INFO("Stack clear done");
 }
@@ -316,5 +308,5 @@ void PageManager::SetStackClear(bool keepBottom)
   */
 const char* PageManager::GetPagePrevName()
 {
-    return _PagePrev ? _PagePrev->_Name : PM_EMPTY_PAGE_NAME;
+    return PagePrev ? PagePrev->Name : PM_EMPTY_PAGE_NAME;
 }

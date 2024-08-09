@@ -1,4 +1,4 @@
-#include "StartUp.h"
+#include "Startup.h"
 
 using namespace Page;
 
@@ -21,13 +21,14 @@ void Startup::onViewLoad()
 {
     Model.Init();
     Model.SetEncoderEnable(false);
-    View.Create(_root);
+    View.Create(root);
     lv_timer_t* timer = lv_timer_create(onTimer, 2000, this);
     lv_timer_set_repeat_count(timer, 1);
 }
 
 void Startup::onViewDidLoad()
 {
+    lv_obj_fade_out(root, 500, 1500);
 }
 
 void Startup::onViewWillAppear()
@@ -38,7 +39,7 @@ void Startup::onViewWillAppear()
 
 void Startup::onViewDidAppear()
 {
-    lv_obj_fade_out(_root, 500, 1500);
+
 }
 
 void Startup::onViewWillDisappear()
@@ -51,22 +52,18 @@ void Startup::onViewDidDisappear()
     Model.SetStatusBarAppear(true);
 }
 
-void Startup::onViewUnload()
+void Startup::onViewDidUnload()
 {
     View.Delete();
     Model.SetEncoderEnable(true);
     Model.Deinit();
 }
 
-void Startup::onViewDidUnload()
-{
-}
-
 void Startup::onTimer(lv_timer_t* timer)
 {
     Startup* instance = (Startup*)timer->user_data;
 
-    instance->_Manager->Replace("Pages/Dialplate");
+    instance->Manager->Push("Pages/Dialplate");
 }
 
 void Startup::onEvent(lv_event_t* event)
@@ -77,7 +74,7 @@ void Startup::onEvent(lv_event_t* event)
     lv_obj_t* obj = lv_event_get_current_target(event);
     lv_event_code_t code = lv_event_get_code(event);
 
-    if (obj == instance->_root)
+    if (obj == instance->root)
     {
         if (code == LV_EVENT_LEAVE)
         {

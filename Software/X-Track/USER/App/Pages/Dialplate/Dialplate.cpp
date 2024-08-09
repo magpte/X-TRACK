@@ -20,7 +20,7 @@ void Dialplate::onCustomAttrConfig()
 void Dialplate::onViewLoad()
 {
     Model.Init();
-    View.Create(_root);
+    View.Create(root);
 
     AttachEvent(View.ui.btnCont.btnMap);
     AttachEvent(View.ui.btnCont.btnRec);
@@ -36,7 +36,6 @@ void Dialplate::onViewWillAppear()
 {
     lv_indev_wait_release(lv_indev_get_act());
     lv_group_t* group = lv_group_get_default();
-    LV_ASSERT_NULL(group);
 
     lv_group_set_wrap(group, false);
 
@@ -68,7 +67,6 @@ void Dialplate::onViewDidAppear()
 void Dialplate::onViewWillDisappear()
 {
     lv_group_t* group = lv_group_get_default();
-    LV_ASSERT_NULL(group);
     lastFocus = lv_group_get_focused(group);
     lv_group_remove_all_objs(group);
     lv_timer_del(timer);
@@ -79,15 +77,10 @@ void Dialplate::onViewDidDisappear()
 {
 }
 
-void Dialplate::onViewUnload()
+void Dialplate::onViewDidUnload()
 {
     Model.Deinit();
     View.Delete();
-}
-
-void Dialplate::onViewDidUnload()
-{
-
 }
 
 void Dialplate::AttachEvent(lv_obj_t* obj)
@@ -128,11 +121,11 @@ void Dialplate::onBtnClicked(lv_obj_t* btn)
 {
     if (btn == View.ui.btnCont.btnMap)
     {
-        _Manager->Push("Pages/LiveMap");
+        Manager->Push("Pages/LiveMap");
     }
     else if (btn == View.ui.btnCont.btnMenu)
     {
-        _Manager->Push("Pages/SystemInfos");
+        Manager->Push("Pages/SystemInfos");
     }
 }
 

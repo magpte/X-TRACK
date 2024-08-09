@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/widgets/extra/span.md
+```
 # Span (lv_span)
 
 ## Overview

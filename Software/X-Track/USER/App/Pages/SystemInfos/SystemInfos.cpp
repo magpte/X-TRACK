@@ -20,15 +20,16 @@ void SystemInfos::onCustomAttrConfig()
 void SystemInfos::onViewLoad()
 {
     Model.Init();
-    View.Create(_root);
-    AttachEvent(_root);
-
-    SystemInfosView::item_t* item_grp = ((SystemInfosView::item_t*)&View.ui);
-
-    for (int i = 0; i < sizeof(View.ui) / sizeof(SystemInfosView::item_t); i++)
-    {
-        AttachEvent(item_grp[i].icon);
-    }
+    View.Create(root);
+    AttachEvent(root);
+    AttachEvent(View.ui.sport.icon);
+    AttachEvent(View.ui.gps.icon);
+    AttachEvent(View.ui.imu.icon);
+    AttachEvent(View.ui.mag.icon);
+    AttachEvent(View.ui.rtc.icon);
+    AttachEvent(View.ui.battery.icon);
+    AttachEvent(View.ui.storage.icon);
+    AttachEvent(View.ui.system.icon);
 }
 
 void SystemInfos::onViewDidLoad()
@@ -43,21 +44,19 @@ void SystemInfos::onViewWillAppear()
     timer = lv_timer_create(onTimerUpdate, 1000, this);
     lv_timer_ready(timer);
 
-    View.SetScrollToY(_root, -LV_VER_RES, LV_ANIM_OFF);
-    lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
-    lv_obj_fade_in(_root, 300, 0);
+    View.SetScrollToY(root, -LV_VER_RES, LV_ANIM_OFF);
+    lv_obj_set_style_opa(root, LV_OPA_TRANSP, 0);
+    lv_obj_fade_in(root, 300, 0);
 }
 
 void SystemInfos::onViewDidAppear()
 {
-    lv_group_t* group = lv_group_get_default();
-    LV_ASSERT_NULL(group);
-    View.onFocus(group);
+    View.onFocus(lv_group_get_default());
 }
 
 void SystemInfos::onViewWillDisappear()
 {
-    lv_obj_fade_out(_root, 300, 0);
+    lv_obj_fade_out(root, 300, 0);
 }
 
 void SystemInfos::onViewDidDisappear()
@@ -65,15 +64,10 @@ void SystemInfos::onViewDidDisappear()
     lv_timer_del(timer);
 }
 
-void SystemInfos::onViewUnload()
+void SystemInfos::onViewDidUnload()
 {
     View.Delete();
     Model.Deinit();
-}
-
-void SystemInfos::onViewDidUnload()
-{
-
 }
 
 void SystemInfos::AttachEvent(lv_obj_t* obj)
@@ -120,8 +114,10 @@ void SystemInfos::Update()
     /* Power */
     int usage;
     float voltage;
-    Model.GetBatteryInfo(&usage, &voltage, buf, sizeof(buf));
-    View.SetBattery(usage, voltage, buf);
+    uint16_t remain_cap, full_cap, design_cap, time_to; 
+    int16_t current, avg_power;
+    Model.GetBatteryInfo(&usage, &voltage, buf, sizeof(buf), &current, &remain_cap, &full_cap, &avg_power, &design_cap, &time_to);
+    View.SetBattery(usage, voltage, buf, current, remain_cap, full_cap, avg_power, design_cap, time_to);
 
     /* Storage */
     bool detect;
@@ -165,15 +161,15 @@ void SystemInfos::onEvent(lv_event_t* event)
     {
         if (lv_obj_has_state(obj, LV_STATE_FOCUSED))
         {
-            instance->_Manager->Pop();
+            instance->Manager->Pop();
         }
     }
 
-    if (obj == instance->_root)
+    if (obj == instance->root)
     {
         if (code == LV_EVENT_LEAVE)
         {
-            instance->_Manager->Pop();
+            instance->Manager->Pop();
         }
     }
 }

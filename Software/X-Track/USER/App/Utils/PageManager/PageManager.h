@@ -106,15 +106,14 @@ public:
     ~PageManager();
 
     /* Loader */
-    bool Install(const char* className, const char* appName);
+    PageBase* Install(const char* className, const char* appName);
     bool Uninstall(const char* appName);
     bool Register(PageBase* base, const char* name);
     bool Unregister(const char* name);
 
     /* Router */
-    bool Replace(const char* name, const PageBase::Stash_t* stash = nullptr);
-    bool Push(const char* name, const PageBase::Stash_t* stash = nullptr);
-    bool Pop();
+    PageBase* Push(const char* name, const PageBase::Stash_t* stash = nullptr);
+    PageBase* Pop();
     bool BackHome();
     const char* GetPagePrevName();
 
@@ -125,11 +124,6 @@ public:
         lv_anim_path_cb_t path = lv_anim_path_ease_out
     );
 
-    void SetRootDefaultStyle(lv_style_t* style)
-    {
-        _RootDefaultStyle = style;
-    }
-
 private:
     /* Page Pool */
     PageBase* FindPageInPool(const char* name);
@@ -138,7 +132,7 @@ private:
     PageBase* FindPageInStack(const char* name);
     PageBase* GetStackTop();
     PageBase* GetStackTopAfter();
-    void SetStackClear(bool keepBottom = false);
+    void SetStackClear(bool keepBottom = true);
     bool FourceUnload(PageBase* base);
 
     /* Animation */
@@ -158,18 +152,18 @@ private:
     }
     LoadAnim_t GetCurrentLoadAnimType()
     {
-        return (LoadAnim_t)_AnimState.Current.Type;
+        return (LoadAnim_t)AnimState.Current.Type;
     }
 
     /* Root */
     static void onRootDragEvent(lv_event_t* event);
-    static void onRootDragAnimFinish(lv_anim_t* a);
+    static void onRootAnimFinish(lv_anim_t* a);
     static void onRootAsyncLeave(void* base);
     void RootEnableDrag(lv_obj_t* root);
     static void RootGetDragPredict(lv_coord_t* x, lv_coord_t* y);
 
     /* Switch */
-    bool SwitchTo(PageBase* base, bool isEnterAct, const PageBase::Stash_t* stash = nullptr);
+    void SwitchTo(PageBase* base, bool isPushAct, const PageBase::Stash_t* stash = nullptr);
     static void onSwitchAnimFinish(lv_anim_t* a);
     void SwitchAnimCreate(PageBase* base);
     void SwitchAnimTypeUpdate(PageBase* base);
@@ -186,39 +180,36 @@ private:
     void StateUpdate(PageBase* base);
     PageBase::State_t GetState()
     {
-        return _PageCurrent->priv.State;
+        return PageCurrent->priv.State;
     }
 
 private:
 
     /* Page factory */
-    PageFactory* _Factory;
+    PageFactory* Factory;
 
     /* Page pool */
-    std::vector<PageBase*> _PagePool;
+    std::vector<PageBase*> PagePool;
 
     /* Page stack */
-    std::stack<PageBase*> _PageStack;
+    std::stack<PageBase*> PageStack;
 
     /* Previous page */
-    PageBase* _PagePrev;
+    PageBase* PagePrev;
 
     /* The current page */
-    PageBase* _PageCurrent;
+    PageBase* PageCurrent;
 
     /* Page animation status */
     struct
     {
         bool IsSwitchReq;              // Has switch request
         bool IsBusy;                   // Is switching
-        bool IsEntering;               // Is in entering action
+        bool IsPushing;                // Is in push state
 
         PageBase::AnimAttr_t Current;  // Current animation properties
         PageBase::AnimAttr_t Global;   // Global animation properties
-    } _AnimState;
-
-    /* Root style */
-    lv_style_t* _RootDefaultStyle;
+    } AnimState;
 };
 
 #endif

@@ -46,6 +46,8 @@ Reset_Handler   PROC
 
 /* Private typedef -----------------------------------------------------------*/
 
+#define TEST_RAM_SIZE  0x800
+
 /* Private variables ---------------------------------------------------------*/
 
 

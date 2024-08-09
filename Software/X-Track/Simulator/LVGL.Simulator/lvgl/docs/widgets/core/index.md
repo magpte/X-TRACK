@@ -1,3 +1,7 @@
+```eval_rst
+.. include:: /header.rst
+:github_url: |github_link_base|/object-types/index.md
+```
 # Core widgets
 
 ```eval_rst

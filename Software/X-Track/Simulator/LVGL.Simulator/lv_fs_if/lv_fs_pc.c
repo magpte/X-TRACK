@@ -13,12 +13,9 @@
 
 #include <stdio.h>
 #include <errno.h>
-
-#ifdef _WIN32
-#include <windows.h>
 #include "dirent.h"
-#else
-#include <dirent.h>
+#ifdef WIN32
+#include <windows.h>
 #endif
 
 /*********************
