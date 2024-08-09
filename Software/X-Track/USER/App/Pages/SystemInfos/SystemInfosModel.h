@@ -24,9 +24,7 @@ public:
         float* alt,
         char* utc, uint32_t len,
         float* course,
-        float* speed,
-        float* temp,
-        float* pressure
+        float* speed
     );
 
     void GetMAGInfo(

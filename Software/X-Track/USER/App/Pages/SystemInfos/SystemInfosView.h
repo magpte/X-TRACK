@@ -45,9 +45,7 @@ public:
         float alt,
         const char* utc,
         float course,
-        float speed,
-        float temp,
-        float pressure
+        float speed
     );
     void SetMAG(
         float dir,

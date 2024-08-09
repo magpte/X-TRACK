@@ -29,8 +29,6 @@ typedef struct
     float speed;
     int16_t satellites;
     bool isVaild;
-    double temperature;
-    double pressure;
     Clock_Info_t clock;
 } GPS_Info_t;
 

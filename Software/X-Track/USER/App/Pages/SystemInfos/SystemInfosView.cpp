@@ -48,8 +48,6 @@ void SystemInfosView::Create(lv_obj_t* root)
         "UTC Time\n\n"
         "Course\n"
         "Speed\n"
-        "Tempera\n"
-        "Pressure"
     );
 
     /* Item MAG */
@@ -152,7 +150,7 @@ void SystemInfosView::Group_Init()
     lv_group_add_obj(group, ui.battery.icon);
     lv_group_add_obj(group, ui.rtc.icon);
     lv_group_add_obj(group, ui.imu.icon);
-    lv_group_add_obj(group, ui.mag.icon);
+//    lv_group_add_obj(group, ui.mag.icon);
     lv_group_add_obj(group, ui.gps.icon);
     lv_group_add_obj(group, ui.sport.icon);
 
@@ -317,9 +315,7 @@ void SystemInfosView::SetGPS(
     float alt,
     const char* utc,
     float course,
-    float speed,
-    float temp,
-    float pressure
+    float speed
 )
 {
     lv_label_set_text_fmt(
@@ -329,17 +325,13 @@ void SystemInfosView::SetGPS(
         "%0.2fm\n"
         "%s\n"
         "%0.1fdeg\n"
-        "%0.1fkm/h\n"
-        "%0.1fC\n"
-        "%0.1fhPA",
+        "%0.1fkm/h\n",
         lat,
         lng,
         alt,
         utc,
         course,
-        speed,
-        temp,
-        pressure
+        speed
     );
 }
 

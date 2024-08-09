@@ -91,10 +91,8 @@ void SystemInfos::Update()
     float alt;
     float course;
     float speed;
-    float temp;
-    float pressure;
-    Model.GetGPSInfo(&lat, &lng, &alt, buf, sizeof(buf), &course, &speed, &temp, &pressure);
-    View.SetGPS(lat, lng, alt, buf, course, speed, temp, pressure);
+    Model.GetGPSInfo(&lat, &lng, &alt, buf, sizeof(buf), &course, &speed);
+    View.SetGPS(lat, lng, alt, buf, course, speed);
 
     /* MAG */
     float dir;
