@@ -112,7 +112,7 @@
 
 /* Backlight Config */
 #define CONFIG_BACKLIGHT_MIN        150  // Range [0, 1000]
-#define CONFIG_BACKLIGHT_MAX        1000 // Range [0, 1000]
+#define CONFIG_BACKLIGHT_MAX        700 // Range [0, 1000]
 #define CONFIG_BACKLIGHT_CTRL_RANGE 60   // minute Range[1, 120]
 
 /* Use Watch Dog */
