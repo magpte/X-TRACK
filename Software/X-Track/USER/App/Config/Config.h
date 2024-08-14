@@ -53,7 +53,7 @@
 #define CONFIG_MAP_EXT_NAME_DEFAULT           "bin"
 
 #ifndef CONFIG_MAP_IMG_PNG_ENABLE
-#  define CONFIG_MAP_IMG_PNG_ENABLE           0
+#  define CONFIG_MAP_IMG_PNG_ENABLE           1
 #endif
 
 #define CONFIG_GAUGE_DESIGN_CAP_DEFAULT       2000
