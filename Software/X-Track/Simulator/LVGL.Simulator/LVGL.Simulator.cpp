@@ -10,6 +10,7 @@
 
 #include <Windows.h>
 #include <stdio.h>
+#include <assert.h>
 #include "resource.h"
 #include "App.h"
 #include "Common/HAL/HAL.h"
@@ -34,7 +35,11 @@
 #endif
 
 #define SCREEN_HOR_RES  240
-#define SCREEN_VER_RES  320
+#define SCREEN_VER_RES  240
+
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
 
 int main()
 {
