@@ -63,13 +63,7 @@ public:
     void SetBattery(
         int usage,
         float voltage,
-        const char* state,
-        int16_t current,
-        uint16_t remaining_capacity,
-        uint16_t fullcharge_capacity,
-        int16_t average_power,
-        uint16_t design_capacity,
-        uint16_t time_to
+        const char* state
     );
     void SetStorage(
         const char* detect,

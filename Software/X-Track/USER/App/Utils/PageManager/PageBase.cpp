@@ -20,47 +20,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#include "Arduino.h"
-#include "App/App.h"
-#include "HAL/HAL.h"
-#include "lvgl/lvgl.h"
-#include "lv_port/lv_port.h"
+#include "PageBase.h"
+#include "PM_Log.h"
 
-#if LV_USE_DEMO_BENCHMARK
-
-#include "benchmark.inc"
-
-#else
-
-static void setup()
+void PageBase::SetCustomCacheEnable(bool en)
 {
-    HAL::HAL_Init();
-    lv_init();
-    lv_port_init();
-
-    App_Init();
-
-    HAL::Power_SetEventCallback(App_Uninit);
-    HAL::Memory_DumpInfo();
+    PM_LOG_INFO("Page(%s) %s = %d", _Name, __func__, en);
+    SetCustomAutoCacheEnable(false);
+    priv.ReqEnableCache = en;
 }
 
-static void loop()
+void PageBase::SetCustomAutoCacheEnable(bool en)
 {
-    HAL::HAL_Update();
-    lv_task_handler();
-    __wfi();
+    PM_LOG_INFO("Page(%s) %s = %d", _Name, __func__, en);
+    priv.ReqDisableAutoCache = !en;
 }
 
-#endif
-
-/**
-  * @brief  Main Function
-  * @param  None
-  * @retval None
-  */
-int main(void)
+void PageBase::SetCustomLoadAnimType(
+    uint8_t animType,
+    uint16_t time,
+    lv_anim_path_cb_t path
+)
 {
-    Core_Init();
-    setup();
-    for(;;)loop();
+    priv.Anim.Attr.Type = animType;
+    priv.Anim.Attr.Time = time;
+    priv.Anim.Attr.Path = path;
 }
+
+bool PageBase::StashPop(void* ptr, uint32_t size)
+{
+    if (priv.Stash.ptr == nullptr)
+    {
+        PM_LOG_WARN("No Stash found");
+        return false;
+    }
+
+    if (priv.Stash.size != size)
+    {
+        PM_LOG_WARN(
+            "Stash[0x%p](%d) does not match the size(%d)",
+            priv.Stash.ptr,
+            priv.Stash.size,
+            size
+        );
+        return false;
+    }
+
+    memcpy(ptr, priv.Stash.ptr, priv.Stash.size);
+    lv_mem_free(priv.Stash.ptr);
+    priv.Stash.ptr = nullptr;
+    return false;
+}
+
