@@ -43,9 +43,7 @@ void SystemInfosView::Create(lv_obj_t* root)
         "Altitude\n"
         "UTC Time\n\n"
         "Course\n"
-        "Speed\n"
-        "Tempera\n"
-        "Pressure"
+        "Speed"
     );
 
     /* Item MAG */
@@ -319,9 +317,7 @@ void SystemInfosView::SetGPS(
     float alt,
     const char* utc,
     float course,
-    float speed,
-    float temp,
-    float pressure
+    float speed
 )
 {
     lv_label_set_text_fmt(
@@ -330,18 +326,14 @@ void SystemInfosView::SetGPS(
         "%0.6f\n"
         "%0.2fm\n"
         "%s\n"
-        "%0.1fdeg\n"
-        "%0.1fkm/h\n"
-        "%0.1fC\n"
-        "%0.1fhPA",
+        "%0.1f deg\n"
+        "%0.1fkm/h",
         lat,
         lng,
         alt,
         utc,
         course,
-        speed,
-        temp,
-        pressure
+        speed
     );
 }
 

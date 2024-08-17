@@ -45,9 +45,7 @@ void SystemInfosModel::GetGPSInfo(
     float* alt,
     char* utc, uint32_t len,
     float* course,
-    float* speed,
-    float* temp,
-    float* pressure
+    float* speed
 )
 {
     HAL::GPS_Info_t gps = { 0 };
@@ -67,8 +65,6 @@ void SystemInfosModel::GetGPSInfo(
     );
     *course = gps.course;
     *speed = gps.speed;
-    *temp = gps.temperature;
-    *pressure = gps.pressure;
 }
 
 void SystemInfosModel::GetMAGInfo(

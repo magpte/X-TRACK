@@ -33,15 +33,15 @@
 #if CONFIG_SENSOR_ENABLE
 #  define CONFIG_SENSOR_IMU_ENABLE       1
 #  define CONFIG_SENSOR_MAG_ENABLE       0
-#  define CONFIG_SENSOR_PRESSURE_ENABLE  1
-#  define CONFIG_LIPO_FUEL_GAUGE_ENABLE  1
+#  define CONFIG_SENSOR_PRESSURE_ENABLE  0
+#  define CONFIG_LIPO_FUEL_GAUGE_ENABLE  0
 #endif
 
 /* Sensor model */
-#define CONFIG_IMU_MODEL_LSM6DSM 0
-#define CONFIG_IMU_MODEL_MPU6050 1
-#define CONFIG_MAG_MODEL_LIS3MDL 0
-#define CONFIG_MAG_MODEL_QMC6310 1
+#define CONFIG_IMU_MODEL_LSM6DSM 1
+#define CONFIG_IMU_MODEL_MPU6050 0
+#define CONFIG_MAG_MODEL_LIS3MDL 1
+#define CONFIG_MAG_MODEL_QMC6310 0
 
 
 #define NULL_PIN                    PD0
@@ -68,7 +68,7 @@
 
 /* GPS */
 #define CONFIG_GPS_SERIAL           Serial2
-#define CONFIG_GPS_USE_TRANSPARENT  0
+#define CONFIG_GPS_USE_TRANSPARENT  1
 #define CONFIG_GPS_BUF_OVERLOAD_CHK 0
 #define CONFIG_GPS_TX_PIN           PA3
 #define CONFIG_GPS_RX_PIN           PA2
@@ -88,8 +88,8 @@
 
 /* Power */
 #define CONFIG_POWER_EN_PIN         PA12
-#define CONFIG_POWER_WAIT_TIME      1000
-#define CONFIG_POWER_SHUTDOWM_DELAY 5000
+#define CONFIG_POWER_WAIT_TIME      500
+#define CONFIG_POWER_SHUTDOWM_DELAY 2500
 
 /* Debug USART */
 #define CONFIG_DEBUG_SERIAL         Serial
@@ -110,5 +110,10 @@
 /* Show Stack & Heap Info */
 #define CONFIG_SHOW_STACK_INFO      0
 #define CONFIG_SHOW_HEAP_INFO       0
+
+/* Backlight Config */
+#define CONFIG_BACKLIGHT_MIN        150  // Range [0, 1000]
+#define CONFIG_BACKLIGHT_MAX        700 // Range [0, 1000]
+#define CONFIG_BACKLIGHT_CTRL_RANGE 60   // minute Range[1, 120]
 
 #endif

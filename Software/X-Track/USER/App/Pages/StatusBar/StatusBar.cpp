@@ -28,7 +28,7 @@
 #define BATT_USAGE_HEIGHT (lv_obj_get_style_height(ui.battery.img, 0) - 6)
 #define BATT_USAGE_WIDTH  (lv_obj_get_style_width(ui.battery.img, 0) - 4)
 
-#define STATUS_BAR_HEIGHT 25
+#define STATUS_BAR_HEIGHT 24
 
 static Account* actStatusBar;
 
