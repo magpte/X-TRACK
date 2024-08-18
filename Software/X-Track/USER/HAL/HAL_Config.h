@@ -32,17 +32,12 @@
 
 #if CONFIG_SENSOR_ENABLE
 #  define CONFIG_SENSOR_IMU_ENABLE       1
-#  define CONFIG_SENSOR_MAG_ENABLE       0
-#  define CONFIG_SENSOR_PRESSURE_ENABLE  0
 #  define CONFIG_LIPO_FUEL_GAUGE_ENABLE  0
 #endif
 
 /* Sensor model */
 #define CONFIG_IMU_MODEL_LSM6DSM 1
 #define CONFIG_IMU_MODEL_MPU6050 0
-#define CONFIG_MAG_MODEL_LIS3MDL 1
-#define CONFIG_MAG_MODEL_QMC6310 0
-
 
 #define NULL_PIN                    PD0
 

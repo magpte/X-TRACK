@@ -601,11 +601,6 @@
               <FilePath>..\USER\App\Common\DataProc\DP_IMU.cpp</FilePath>
             </File>
             <File>
-              <FileName>DP_MAG.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\USER\App\Common\DataProc\DP_MAG.cpp</FilePath>
-            </File>
-            <File>
               <FileName>DP_MusicPlayer.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\USER\App\Common\DataProc\DP_MusicPlayer.cpp</FilePath>
@@ -2986,11 +2981,6 @@
               <FilePath>..\USER\HAL\HAL_IMU.cpp</FilePath>
             </File>
             <File>
-              <FileName>HAL_MAG.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\USER\HAL\HAL_MAG.cpp</FilePath>
-            </File>
-            <File>
               <FileName>HAL_Memory.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\USER\HAL\HAL_Memory.cpp</FilePath>
@@ -3919,11 +3909,6 @@
               <FilePath>..\Libraries\ButtonEvent\ButtonEvent.cpp</FilePath>
             </File>
             <File>
-              <FileName>LIS3MDL.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\LIS3MDL\LIS3MDL.cpp</FilePath>
-            </File>
-            <File>
               <FileName>LSM6DSM.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\LSM6DSM\LSM6DSM.cpp</FilePath>
@@ -3944,11 +3929,6 @@
               <FilePath>..\Libraries\StackInfo\StackInfo.c</FilePath>
             </File>
             <File>
-              <FileName>BMP280.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\BMP280\BMP280.cpp</FilePath>
-            </File>
-            <File>
               <FileName>BQ27220.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\BQ27220\BQ27220.cpp</FilePath>
@@ -3962,11 +3942,6 @@
               <FileName>MPU6050.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\MPU6050\MPU6050.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>QMC6310.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\QMC6310\QMC6310.cpp</FilePath>
             </File>
           </Files>
         </Group>
