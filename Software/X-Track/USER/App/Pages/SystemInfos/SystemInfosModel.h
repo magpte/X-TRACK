@@ -27,13 +27,6 @@ public:
         float* speed
     );
 
-    void GetMAGInfo(
-        float* dir,
-        int* x,
-        int* y,
-        int* z
-    );
-
     void GetIMUInfo(
         int* step,
         char* info, uint32_t len

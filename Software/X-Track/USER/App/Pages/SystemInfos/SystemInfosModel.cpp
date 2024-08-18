@@ -9,7 +9,6 @@ void SystemInfosModel::Init()
 
     account->Subscribe("SportStatus");
     account->Subscribe("GPS");
-    account->Subscribe("MAG");
     account->Subscribe("IMU");
     account->Subscribe("Clock");
     account->Subscribe("Power");
@@ -65,23 +64,6 @@ void SystemInfosModel::GetGPSInfo(
     );
     *course = gps.course;
     *speed = gps.speed;
-}
-
-void SystemInfosModel::GetMAGInfo(
-    float* dir,
-    int* x,
-    int* y,
-    int* z
-)
-{
-    HAL::MAG_Info_t mag = { 0 };
-
-    account->Pull("MAG", &mag, sizeof(mag));
-
-    *dir = 0;
-    *x = mag.x;
-    *y = mag.y;
-    *z = mag.z;
 }
 
 void SystemInfosModel::GetIMUInfo(

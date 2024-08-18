@@ -46,19 +46,6 @@ void SystemInfosView::Create(lv_obj_t* root)
         "Speed"
     );
 
-    /* Item MAG */
-    Item_Create(
-        &ui.mag,
-        root,
-        "MAG",
-        "compass",
-
-        "Compass\n"
-        "X\n"
-        "Y\n"
-        "Z"
-    );
-
     /* Item IMU */
     Item_Create(
         &ui.imu,
@@ -334,26 +321,6 @@ void SystemInfosView::SetGPS(
         utc,
         course,
         speed
-    );
-}
-
-void SystemInfosView::SetMAG(
-    float dir,
-    int x,
-    int y,
-    int z
-)
-{
-    lv_label_set_text_fmt(
-        ui.mag.labelData,
-        "%0.1f deg\n"
-        "%d\n"
-        "%d\n"
-        "%d",
-        dir,
-        x,
-        y,
-        z
     );
 }
 

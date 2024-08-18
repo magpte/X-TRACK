@@ -25,7 +25,6 @@ public:
     {
         item_t sport;
         item_t gps;
-        item_t mag;
         item_t imu;
         item_t rtc;
         item_t battery;
@@ -46,12 +45,6 @@ public:
         const char* utc,
         float course,
         float speed
-    );
-    void SetMAG(
-        float dir,
-        int x,
-        int y,
-        int z
     );
     void SetIMU(
         int step,

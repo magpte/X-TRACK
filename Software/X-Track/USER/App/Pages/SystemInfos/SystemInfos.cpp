@@ -99,14 +99,6 @@ void SystemInfos::Update()
     float speed;
     Model.GetGPSInfo(&lat, &lng, &alt, buf, sizeof(buf), &course, &speed);
     View.SetGPS(lat, lng, alt, buf, course, speed);
-	
-    /* MAG */
-    float dir;
-    int x;
-    int y;
-    int z;
-    Model.GetMAGInfo(&dir, &x, &y, &z);
-    View.SetMAG(dir, x, y, z);
 
     /* IMU */
     int steps;
