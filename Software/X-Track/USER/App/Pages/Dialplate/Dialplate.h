@@ -20,7 +20,6 @@ public:
     virtual void onViewDidAppear();
     virtual void onViewWillDisappear();
     virtual void onViewDidDisappear();
-    virtual void onViewUnload();
     virtual void onViewDidUnload();
 
 private:
